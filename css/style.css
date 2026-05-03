@@ -47,7 +47,7 @@ body::before {
   opacity: 1;
   pointer-events: none;
   transform: translate3d(0, 0, 0);
-  animation: ambientBackground 5s ease-in-out infinite alternate;
+  animation: ambientBackground 15s ease-in-out infinite alternate;
 }
 
 main,
