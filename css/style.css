@@ -97,7 +97,7 @@ a {
   border-radius: 0;
   background: transparent;
   box-shadow: none;
-  object-fit: contain;
+  object-fit: cover;
   object-position: center;
 }
 
