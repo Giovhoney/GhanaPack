@@ -124,7 +124,7 @@ document.querySelectorAll(".hero-slider").forEach((slider) => {
 });
 
 const revealTargets = document.querySelectorAll(
-  ".hero-content, .hero-media, .proof-strip, .section-heading, .category-card, .feature, .split-section > *, .industry-row span, .service-card, .faq-list details, .cta-band, .product-card, .contact-panel, .quote-form"
+  ".hero-content, .hero-media, .proof-strip, .section-heading, .category-card, .feature, .split-section > *, .industry-row span, .service-card, .faq-list details, .cta-band, .product-card, .store-panel, .store-card, .contact-panel, .quote-form"
 );
 
 if ("IntersectionObserver" in window) {
@@ -174,3 +174,134 @@ document.querySelectorAll("img[data-swap-src]").forEach((image) => {
     image.setAttribute("src", originalSrc);
   });
 });
+
+const storeProducts = Array.from(document.querySelectorAll("[data-store-product]"));
+const storeSearch = document.querySelector("#storeSearch");
+const storeFilters = Array.from(document.querySelectorAll(".store-filter"));
+const storeCount = document.querySelector("#storeCount");
+const storeEmpty = document.querySelector(".store-empty");
+const cartItemsWrap = document.querySelector("[data-cart-items]");
+const storeCheckout = document.querySelector(".store-checkout");
+const storeClear = document.querySelector(".store-clear");
+const storeCustomerName = document.querySelector("#storeCustomerName");
+const storeCustomerPhone = document.querySelector("#storeCustomerPhone");
+const storeCustomerNote = document.querySelector("#storeCustomerNote");
+const quoteCart = [];
+
+if (storeProducts.length) {
+  let activeCategory = "all";
+
+  const normalise = (value) => value.toLowerCase().trim();
+
+  const getProductData = (card) => ({
+    name: card.dataset.name,
+    category: card.dataset.category,
+    keywords: card.dataset.keywords || "",
+  });
+
+  const renderCart = () => {
+    if (!cartItemsWrap || !storeCheckout) {
+      return;
+    }
+
+    if (!quoteCart.length) {
+      cartItemsWrap.innerHTML = '<p class="store-note">Your quote cart is empty. Add products to request availability and pricing.</p>';
+    } else {
+      cartItemsWrap.innerHTML = quoteCart
+        .map(
+          (item) =>
+            `<div class="cart-line"><strong>${item.name}</strong><span>${item.category} • Qty: ${item.quantity}</span></div>`
+        )
+        .join("");
+    }
+
+    const name = storeCustomerName?.value.trim();
+    const phone = storeCustomerPhone?.value.trim();
+    const note = storeCustomerNote?.value.trim();
+    const itemsText = quoteCart.length
+      ? quoteCart.map((item) => `- ${item.name} (${item.category}) x ${item.quantity}`).join("\n")
+      : "- I need help choosing packaging";
+    const message = [
+      "Hello GPS, I would like a quote from the website store.",
+      name ? `Name: ${name}` : "",
+      phone ? `Phone: ${phone}` : "",
+      "",
+      "Items:",
+      itemsText,
+      note ? `\nNotes: ${note}` : "",
+    ]
+      .filter(Boolean)
+      .join("\n");
+
+    storeCheckout.href = `https://wa.me/233540645292?text=${encodeURIComponent(message)}`;
+  };
+
+  const filterProducts = () => {
+    const searchTerm = normalise(storeSearch?.value || "");
+    let visibleCount = 0;
+
+    storeProducts.forEach((card) => {
+      const product = getProductData(card);
+      const haystack = normalise(`${product.name} ${product.category} ${product.keywords}`);
+      const matchesCategory = activeCategory === "all" || product.category === activeCategory;
+      const matchesSearch = !searchTerm || haystack.includes(searchTerm);
+      const isVisible = matchesCategory && matchesSearch;
+
+      card.hidden = !isVisible;
+      if (isVisible) {
+        visibleCount += 1;
+      }
+    });
+
+    if (storeCount) {
+      storeCount.textContent = String(visibleCount);
+    }
+
+    if (storeEmpty) {
+      storeEmpty.hidden = visibleCount !== 0;
+    }
+  };
+
+  storeFilters.forEach((button) => {
+    button.addEventListener("click", () => {
+      activeCategory = button.dataset.filter || "all";
+      storeFilters.forEach((filterButton) => filterButton.classList.toggle("is-active", filterButton === button));
+      filterProducts();
+    });
+  });
+
+  storeSearch?.addEventListener("input", filterProducts);
+
+  storeProducts.forEach((card) => {
+    const addButton = card.querySelector(".store-add");
+
+    addButton?.addEventListener("click", () => {
+      const product = getProductData(card);
+      const existingItem = quoteCart.find((item) => item.name === product.name);
+
+      if (existingItem) {
+        existingItem.quantity += 1;
+      } else {
+        quoteCart.push({ ...product, quantity: 1 });
+      }
+
+      addButton.textContent = "Added";
+      window.setTimeout(() => {
+        addButton.textContent = "Add";
+      }, 900);
+      renderCart();
+    });
+  });
+
+  [storeCustomerName, storeCustomerPhone, storeCustomerNote].forEach((field) => {
+    field?.addEventListener("input", renderCart);
+  });
+
+  storeClear?.addEventListener("click", () => {
+    quoteCart.splice(0, quoteCart.length);
+    renderCart();
+  });
+
+  filterProducts();
+  renderCart();
+}
