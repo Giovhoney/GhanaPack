@@ -77,6 +77,12 @@ a {
   background: rgba(255, 255, 255, 0.88);
   border-bottom: 1px solid var(--line);
   backdrop-filter: blur(16px);
+  transition: transform 260ms ease, box-shadow 260ms ease, background 260ms ease;
+  will-change: transform;
+}
+
+.site-header.is-hidden {
+  transform: translateY(-100%);
 }
 
 .brand,

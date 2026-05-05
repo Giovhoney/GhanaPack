@@ -1,12 +1,51 @@
 const navToggle = document.querySelector(".nav-toggle");
 const siteNav = document.querySelector(".site-nav");
+const siteHeader = document.querySelector(".site-header");
 
 if (navToggle && siteNav) {
   navToggle.addEventListener("click", () => {
     const isOpen = siteNav.classList.toggle("is-open");
     navToggle.setAttribute("aria-expanded", String(isOpen));
     navToggle.textContent = isOpen ? "Close" : "Menu";
+
+    if (isOpen) {
+      siteHeader?.classList.remove("is-hidden");
+    }
   });
+}
+
+if (siteHeader) {
+  let lastScrollY = window.scrollY;
+  let ticking = false;
+
+  const updateHeaderVisibility = () => {
+    const currentScrollY = Math.max(window.scrollY, 0);
+    const isMenuOpen = siteNav?.classList.contains("is-open");
+    const scrollingDown = currentScrollY > lastScrollY;
+    const scrollDistance = Math.abs(currentScrollY - lastScrollY);
+
+    if (currentScrollY < 80 || isMenuOpen) {
+      siteHeader.classList.remove("is-hidden");
+    } else if (scrollDistance > 6 && scrollingDown) {
+      siteHeader.classList.add("is-hidden");
+    } else if (scrollDistance > 6) {
+      siteHeader.classList.remove("is-hidden");
+    }
+
+    lastScrollY = currentScrollY;
+    ticking = false;
+  };
+
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (!ticking) {
+        window.requestAnimationFrame(updateHeaderVisibility);
+        ticking = true;
+      }
+    },
+    { passive: true }
+  );
 }
 
 const quoteForm = document.querySelector(".quote-form");
