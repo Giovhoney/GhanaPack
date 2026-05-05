@@ -32,6 +32,10 @@ body {
   isolation: isolate;
 }
 
+body.modal-open {
+  overflow: hidden;
+}
+
 body::before {
   position: fixed;
   inset: -18%;
@@ -926,6 +930,72 @@ p {
   padding: 0 14px;
 }
 
+.store-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: end center;
+  padding: 18px;
+}
+
+.store-modal[hidden] {
+  display: none;
+}
+
+.store-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(11, 61, 46, 0.48);
+  backdrop-filter: blur(8px);
+}
+
+.store-modal-card {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  width: min(100%, 520px);
+  max-height: min(86vh, 760px);
+  overflow: auto;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 18px;
+  background: var(--white);
+  box-shadow: 0 30px 80px rgba(11, 61, 46, 0.28);
+}
+
+.store-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+  min-height: 38px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0 14px;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--green);
+  cursor: pointer;
+  font: inherit;
+  font-weight: 850;
+}
+
+.store-modal-image {
+  width: 100%;
+  aspect-ratio: 1.18 / 1;
+  object-fit: cover;
+}
+
+.store-modal-content {
+  display: grid;
+  gap: 12px;
+  padding: 22px;
+}
+
+.store-modal-note {
+  color: var(--green);
+  font-weight: 850;
+}
+
 .product-list {
   display: grid;
   gap: 22px;
@@ -1190,9 +1260,43 @@ p {
   .feature-grid.three,
   .industry-row,
   .service-grid,
-  .store-grid,
   .product-card {
     grid-template-columns: 1fr;
+  }
+
+  .store-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .store-card {
+    cursor: pointer;
+    border-radius: 12px;
+  }
+
+  .store-card:hover {
+    transform: none;
+  }
+
+  .store-card img {
+    aspect-ratio: 1 / 1;
+  }
+
+  .store-card-body {
+    gap: 7px;
+    padding: 10px;
+  }
+
+  .store-card-body h3 {
+    margin-bottom: 0;
+    font-size: 0.9rem;
+    line-height: 1.18;
+  }
+
+  .store-card-body p,
+  .store-card-actions span,
+  .store-tag {
+    display: none;
   }
 
   .store-section-heading {
@@ -1201,8 +1305,14 @@ p {
   }
 
   .store-card-actions {
-    align-items: stretch;
-    flex-direction: column;
+    margin-top: 0;
+  }
+
+  .store-add {
+    width: 100%;
+    min-height: 36px;
+    padding: 0 10px;
+    font-size: 0.82rem;
   }
 
   .product-card {

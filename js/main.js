@@ -186,10 +186,18 @@ const storeClear = document.querySelector(".store-clear");
 const storeCustomerName = document.querySelector("#storeCustomerName");
 const storeCustomerPhone = document.querySelector("#storeCustomerPhone");
 const storeCustomerNote = document.querySelector("#storeCustomerNote");
+const storeModal = document.querySelector(".store-modal");
+const storeModalImage = document.querySelector(".store-modal-image");
+const storeModalCategory = document.querySelector(".store-modal-category");
+const storeModalTitle = document.querySelector("#storeModalTitle");
+const storeModalDescription = document.querySelector(".store-modal-description");
+const storeModalNote = document.querySelector(".store-modal-note");
+const storeModalAdd = document.querySelector(".store-modal-add");
 const quoteCart = [];
 
 if (storeProducts.length) {
   let activeCategory = "all";
+  let activeModalProduct;
 
   const normalise = (value) => value.toLowerCase().trim();
 
@@ -197,7 +205,28 @@ if (storeProducts.length) {
     name: card.dataset.name,
     category: card.dataset.category,
     keywords: card.dataset.keywords || "",
+    description: card.querySelector("p")?.textContent.trim() || "",
+    imageAlt: card.querySelector("img")?.alt || "",
+    imageSrc: card.querySelector("img")?.getAttribute("src") || "",
+    note: card.querySelector(".store-card-actions span")?.textContent.trim() || "Quote by quantity",
   });
+
+  const addProductToCart = (product) => {
+    const existingItem = quoteCart.find((item) => item.name === product.name);
+
+    if (existingItem) {
+      existingItem.quantity += 1;
+    } else {
+      quoteCart.push({
+        name: product.name,
+        category: product.category,
+        keywords: product.keywords,
+        quantity: 1,
+      });
+    }
+
+    renderCart();
+  };
 
   const renderCart = () => {
     if (!cartItemsWrap || !storeCheckout) {
@@ -277,20 +306,72 @@ if (storeProducts.length) {
 
     addButton?.addEventListener("click", () => {
       const product = getProductData(card);
-      const existingItem = quoteCart.find((item) => item.name === product.name);
-
-      if (existingItem) {
-        existingItem.quantity += 1;
-      } else {
-        quoteCart.push({ ...product, quantity: 1 });
-      }
+      addProductToCart(product);
 
       addButton.textContent = "Added";
       window.setTimeout(() => {
         addButton.textContent = "Add";
       }, 900);
-      renderCart();
     });
+
+    card.addEventListener("click", (event) => {
+      if (event.target.closest(".store-add")) {
+        return;
+      }
+
+      const product = getProductData(card);
+      activeModalProduct = product;
+
+      if (storeModalImage) {
+        storeModalImage.src = product.imageSrc;
+        storeModalImage.alt = product.imageAlt;
+      }
+
+      if (storeModalCategory) {
+        storeModalCategory.textContent = product.category;
+      }
+
+      if (storeModalTitle) {
+        storeModalTitle.textContent = product.name;
+      }
+
+      if (storeModalDescription) {
+        storeModalDescription.textContent = product.description;
+      }
+
+      if (storeModalNote) {
+        storeModalNote.textContent = product.note;
+      }
+
+      storeModal?.removeAttribute("hidden");
+      document.body.classList.add("modal-open");
+    });
+  });
+
+  storeModalAdd?.addEventListener("click", () => {
+    if (!activeModalProduct) {
+      return;
+    }
+
+    addProductToCart(activeModalProduct);
+    storeModalAdd.textContent = "Added to Quote";
+    window.setTimeout(() => {
+      storeModalAdd.textContent = "Add to Quote";
+    }, 900);
+  });
+
+  document.querySelectorAll("[data-store-close]").forEach((button) => {
+    button.addEventListener("click", () => {
+      storeModal?.setAttribute("hidden", "");
+      document.body.classList.remove("modal-open");
+    });
+  });
+
+  window.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !storeModal?.hasAttribute("hidden")) {
+      storeModal?.setAttribute("hidden", "");
+      document.body.classList.remove("modal-open");
+    }
   });
 
   [storeCustomerName, storeCustomerPhone, storeCustomerNote].forEach((field) => {
