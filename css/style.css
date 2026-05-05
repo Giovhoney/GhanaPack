@@ -72,8 +72,8 @@ a {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 24px;
-  padding: 8px max(24px, calc((100vw - var(--container)) / 2));
+  gap: 20px;
+  padding: 5px max(24px, calc((100vw - var(--container)) / 2));
   background: rgba(255, 255, 255, 0.88);
   border-bottom: 1px solid var(--line);
   backdrop-filter: blur(16px);
@@ -91,8 +91,8 @@ a {
 }
 
 .brand-logo {
-  width: 300px;
-  height: 100px;
+  width: 270px;
+  height: 76px;
   border: 0;
   border-radius: 0;
   background: transparent;
@@ -113,7 +113,7 @@ a {
 
 .footer-logo {
   width: 100%;
-  aspect-ratio: 3 / 2;
+  aspect-ratio: 5 / 2;
   border: 0;
   border-radius: 0;
   background: transparent;
@@ -927,9 +927,8 @@ p {
   }
 
   .brand-logo {
-    width: 210px;
-    height: 74px;
-    border-radius: 12px;
+    width: 220px;
+    height: 62px;
   }
 
   .footer-brand-logo {
