@@ -373,6 +373,48 @@ p {
   transform: scale(1.045);
 }
 
+.product-gallery {
+  display: grid;
+  width: min(var(--container), calc(100% - 40px));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+  margin: 0 auto 72px;
+}
+
+.gallery-card {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--white);
+  box-shadow: 0 14px 40px rgba(11, 61, 46, 0.07);
+  transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+}
+
+.gallery-card:hover {
+  border-color: rgba(200, 169, 106, 0.62);
+  box-shadow: var(--shadow);
+  transform: translateY(-5px);
+}
+
+.gallery-card img {
+  width: 100%;
+  aspect-ratio: 1.18 / 1;
+  object-fit: cover;
+  transition: transform 600ms ease, filter 600ms ease;
+}
+
+.gallery-card:hover img {
+  filter: saturate(1.08) contrast(1.04);
+  transform: scale(1.045);
+}
+
+.gallery-card figcaption {
+  padding: 14px 15px 16px;
+  color: var(--green-900);
+  font-size: 0.94rem;
+  font-weight: 850;
+}
+
 .proof-strip {
   display: grid;
   width: min(var(--container), calc(100% - 40px));
@@ -1208,6 +1250,7 @@ p {
   .industry-row,
   .service-grid,
   .proof-strip,
+  .product-gallery,
   .store-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -1260,6 +1303,7 @@ p {
   .feature-grid.three,
   .industry-row,
   .service-grid,
+  .product-gallery,
   .product-card {
     grid-template-columns: 1fr;
   }

@@ -124,7 +124,7 @@ document.querySelectorAll(".hero-slider").forEach((slider) => {
 });
 
 const revealTargets = document.querySelectorAll(
-  ".hero-content, .hero-media, .proof-strip, .section-heading, .category-card, .feature, .split-section > *, .industry-row span, .service-card, .faq-list details, .cta-band, .product-card, .store-panel, .store-card, .contact-panel, .quote-form"
+  ".hero-content, .hero-media, .proof-strip, .section-heading, .category-card, .feature, .split-section > *, .industry-row span, .service-card, .gallery-card, .faq-list details, .cta-band, .product-card, .store-panel, .store-card, .contact-panel, .quote-form"
 );
 
 if ("IntersectionObserver" in window) {
