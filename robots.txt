@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://ghanapack.com/sitemap.xml
+Sitemap: https://www.ghanapack.com/sitemap.xml
