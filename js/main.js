@@ -65,7 +65,8 @@ if (quoteForm) {
 document.querySelectorAll(".hero-slider").forEach((slider) => {
   const slides = Array.from(slider.querySelectorAll(".hero-slide"));
   const dotsWrap = slider.querySelector(".hero-slider-dots");
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const canHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
   let activeIndex = slides.findIndex((slide) => slide.classList.contains("is-active"));
   let timer;
 
@@ -96,7 +97,7 @@ document.querySelectorAll(".hero-slider").forEach((slider) => {
   };
 
   const startSlider = () => {
-    if (reduceMotion) {
+    if (prefersReducedMotion) {
       return;
     }
 
@@ -110,12 +111,24 @@ document.querySelectorAll(".hero-slider").forEach((slider) => {
     window.clearInterval(timer);
   };
 
-  slider.addEventListener("mouseenter", stopSlider);
-  slider.addEventListener("mouseleave", startSlider);
-  slider.addEventListener("focusin", stopSlider);
-  slider.addEventListener("focusout", startSlider);
+  if (canHover) {
+    slider.addEventListener("mouseenter", stopSlider);
+    slider.addEventListener("mouseleave", startSlider);
+    slider.addEventListener("focusin", stopSlider);
+    slider.addEventListener("focusout", startSlider);
+  }
 
-  if (!reduceMotion) {
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      stopSlider();
+    } else {
+      startSlider();
+    }
+  });
+
+  window.addEventListener("pageshow", startSlider);
+
+  if (!prefersReducedMotion) {
     window.setTimeout(() => {
       showSlide((activeIndex + 1) % slides.length);
       startSlider();
@@ -153,8 +166,15 @@ document.querySelectorAll("img[data-swap-src]").forEach((image) => {
   const originalSrc = image.getAttribute("src");
   const swapSrc = image.dataset.swapSrc;
   const parent = image.closest("a, article, figure");
+  const canHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
   if (!parent || !swapSrc) {
+    return;
+  }
+
+  image.dataset.originalSrc = originalSrc;
+
+  if (!canHover) {
     return;
   }
 
@@ -172,6 +192,12 @@ document.querySelectorAll("img[data-swap-src]").forEach((image) => {
 
   parent.addEventListener("focusout", () => {
     image.setAttribute("src", originalSrc);
+  });
+});
+
+window.addEventListener("pageshow", () => {
+  document.querySelectorAll("img[data-original-src]").forEach((image) => {
+    image.setAttribute("src", image.dataset.originalSrc);
   });
 });
 
