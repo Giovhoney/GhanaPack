@@ -101,8 +101,8 @@ a {
 }
 
 .brand-logo {
-  width: 270px;
-  height: 76px;
+  width: 54px;
+  height: 54px;
   border: 0;
   border-radius: 0;
   background: transparent;
@@ -112,18 +112,18 @@ a {
 }
 
 .brand-text {
-  display: none;
+  display: block;
   line-height: 1.15;
 }
 
 .footer-brand-logo {
-  display: block;
+  display: inline-flex;
   max-width: 360px;
 }
 
 .footer-logo {
-  width: 100%;
-  aspect-ratio: 5 / 2;
+  width: 68px;
+  height: 68px;
   border: 0;
   border-radius: 0;
   background: transparent;
@@ -632,7 +632,7 @@ p {
   right: 22px;
   bottom: 18px;
   color: rgba(200, 169, 106, 0.32);
-  content: "GPS";
+  content: "GP";
   font-family: Georgia, "Times New Roman", serif;
   font-size: 2.4rem;
   font-weight: 700;
@@ -1272,8 +1272,8 @@ p {
   }
 
   .brand-logo {
-    width: 220px;
-    height: 62px;
+    width: 48px;
+    height: 48px;
   }
 
   .footer-brand-logo {

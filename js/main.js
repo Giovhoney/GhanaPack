@@ -57,7 +57,7 @@ if (quoteForm) {
     const interest = formData.get("interest") || "Packaging";
     const details = formData.get("message") || "";
     const phone = "233540645292";
-    const message = encodeURIComponent(`Hello GPS, I would like a quote for ${interest}. ${details}`);
+    const message = encodeURIComponent(`Hello GhanaPack, I would like a quote for ${interest}. ${details}`);
     window.location.href = `https://wa.me/${phone}?text=${message}`;
   });
 }
@@ -277,7 +277,7 @@ if (storeProducts.length) {
       ? quoteCart.map((item) => `- ${item.name} (${item.category}) x ${item.quantity}`).join("\n")
       : "- I need help choosing packaging";
     const message = [
-      "Hello GPS, I would like a quote from the website store.",
+      "Hello GhanaPack, I would like a quote from the website store.",
       name ? `Name: ${name}` : "",
       phone ? `Phone: ${phone}` : "",
       "",
